@@ -1,36 +1,50 @@
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import com.bridgelabz.junit.UserRegistration;
+import com.sun.tools.javac.code.Attribute.Array;
 
 import junit.framework.Assert;
 
+@RunWith(Parameterized.class)
 public class UserRegistrationTest {
-	boolean result;
-	UserRegistration performTest = new UserRegistration();
-	@Test
-	public void firstNameTest() {
-		result = performTest.firstName("Shubham");
-		Assert.assertEquals(true, result);
+
+	UserRegistration emailTest;
+	private final boolean expected;
+	private String emailCheck;
+
+	@Before
+	public void setUp() {
+		emailTest = new UserRegistration();
 	}
-	@Test
-	public void lastNameTest() {
-		result = performTest.firstName("Saini");
-		Assert.assertEquals(true, result);
+
+	// generating constructor
+	public UserRegistrationTest(UserRegistration emailTest, boolean expected) {
+
+		this.emailTest = emailTest;
+		this.expected = expected;
+
 	}
-	@Test
-	public void validEmailTest() {
-		result = performTest.firstName("abc.100@yahoo.com");
-		Assert.assertEquals(true, result);
+
+	@Parameterized.Parameters
+	public static Collection<Object[]> testData() {
+
+		Object[][] data = new Object[][] { { "abc@yahoo.com", true }, { "abc-100@yahoo.com", true },
+				{ "abc.100@yahoo.com", true }, { "abc111@abc.com", true }, { "abc-100@abc.net", true },
+				{ "abc.100@abc.com.au", true }, { "abc@1.com", true }, { "abc@yahoo.com.com", true },
+				{ "abc+100@yahoo.com", true }, { "abc@.com", false } };
+		return Arrays.asList(data);
+
 	}
+
 	@Test
-	public void mobileNumberChecker() {
-		result = performTest.firstName("98475683982983");
-		Assert.assertEquals(true, result);
+	public void testUserRegis() {
+		Assert.assertEquals(expected, emailTest.regexCheck(emailCheck));
 	}
-	@Test
-	public void passwordChecker() {
-		result = performTest.firstName("345shHjk&^#");
-		Assert.assertEquals(true, result);
-	}
-	
+
 }
